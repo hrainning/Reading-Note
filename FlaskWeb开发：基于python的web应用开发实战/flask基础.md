@@ -150,7 +150,7 @@ path：默认情况下，Flask 在程序文件夹中的 templates 子文件夹�
 1. 表示方法：{{ var }}
 2. 变量类型：几乎所有类型
 3. 修改方式：过滤器，用竖线分割
-4. 安全考量：jinja2默认转移所有变量
+4. 安全考量：jinja2默认转义所有变量
 
 [变量过滤器]( https://jinja.palletsprojects.com/en/2.11.x/templates/#builtin-filters )
 
@@ -205,7 +205,7 @@ path：默认情况下，Flask 在程序文件夹中的 templates 子文件夹�
 <html>
 <head>
 	{% block head %}
-	<title>{% block title %}{% endblock %} - myxxx</title>
+	<title>{% block title %}{% endblock %} - my</title>
 	{% endblock %}
 <\html>
 <!-- 衍生模板 -->
@@ -315,41 +315,9 @@ users.role_id AS users_role_id FROM users WHERE :param_1 = users.role_id'
 >>> user_role = Role.query.filter_by(name='User').first()
 ```
 
-## 数据迁移
-
-使用Flask-Migrate实现数据库迁移
-
-步骤
-
-1. 创建迁移仓库
-2. 创建迁移脚本
-3. 更新数据库
-
-```python
-#创建migrate类
-migrate = Migrate(app, db)
-#可附加到 FlaskScript 的 manager 对象上方便再shell中调用
-#MigrateCommand 类使用 db 命令附加
-manager.add_command('db', MigrateCommand)
-
-#创建迁移仓库，会创建 migrations 文件夹，所有迁移脚本都存放其中
-(venv) $ python hello.py db init 
-
-#创建迁移脚本
-#使用 revision 命令手动创建 Alembic 迁移，也可使用 migrate 命令自动创建。手动创建只会有空的upgrade() 和 downgrade() 函数，自动创建则帮你填好了
-#upgrade() 函数把迁移中的改动应用到数据库中，downgrade() 函数则将改动删除。
-(venv) $ python hello.py db migrate -m "initial migration"
-
-#运行迁移脚本
-#upgrade 命令能把改动应用到数据库中，且不影响其中保存的数据
-(venv) $ python hello.py db upgrade 
-```
-
-
-
 ## 模型
 
-定义：表示程序使用的持久化实体，一般是一个 Python 类，类中 的属性对应数据库表中的列，包括一i写辅助函数
+定义：表示程序使用的持久化实体，一般是一个 Python 类，类中 的属性对应数据库表中的列，包括一些辅助函数
 
 ```python
 db = SQLAlchemy(app)
@@ -372,6 +340,40 @@ class User(db.Model):
  	def __repr__(self):
 	 	return '<User %r>' % self.username
 ```
+
+
+
+## 数据迁移
+
+使用Flask-Migrate实现数据库迁移
+
+步骤
+
+1. 创建迁移仓库
+2. 创建迁移脚本
+3. 更新数据库
+
+```python
+#创建migrate类
+migrate = Migrate(app, db)
+#可附加到 FlaskScript 的 manager 对象上方便在shell中调用
+#MigrateCommand 类使用 db 命令附加
+manager.add_command('db', MigrateCommand)
+
+#创建迁移仓库，会创建 migrations 文件夹，所有迁移脚本都存放其中
+(venv) $ python hello.py db init 
+
+#创建迁移脚本
+#使用 revision 命令手动创建 Alembic 迁移，也可使用 migrate 命令自动创建。手动创建只会有空的upgrade() 和 downgrade() 函数，自动创建则帮你填好了
+#upgrade() 函数把迁移中的改动应用到数据库中，downgrade() 函数则将改动删除。
+(venv) $ python hello.py db migrate -m "initial migration"
+
+#运行迁移脚本
+#upgrade 命令能把改动应用到数据库中，且不影响其中保存的数据
+(venv) $ python hello.py db upgrade 
+```
+
+
 
 ## 集成python shell
 
@@ -396,13 +398,13 @@ Flask-Mail 连接到简单邮件传输协议（Simple Mail Transfer Protocol，S
 #基本结构
 |-flasky
  	|-app/        Flask 的所有程序一般都保存在名为 app 的程序包中
- 		|-templates/
- 		|-static/
+ 		|-templates/  存放模板
+ 		|-static/     存放静态文件
  		|-main/   以结构化的方式定义蓝本模块包
  			|-__init__.py  创建蓝本
  			|-errors.py	错误处理程序
  			|-forms.py  表单对象
- 			|-views.py	程序的路由
+ 			|-views.py	程序的路由/视图函数
  		|-__init__.py   定义程序的工厂函数，延迟程序实例的创建
  		|-email.py
  		|-models.py
