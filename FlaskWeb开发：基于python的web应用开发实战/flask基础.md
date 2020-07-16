@@ -13,11 +13,18 @@ Flask 官方文档（http://flask.pocoo.org/）
 - web服务器网关接口：wsgi
 - 模板系统：jinja2
 
-使用步骤：
+## 创建虚拟环境
+
+windows:
 
 1. 创建虚拟环境：python -m venv < dir >
-2. 激活虚拟环境：source venv/bin/activate  |  venv\Scripts\activate 若要返回全局解释器用deactivate即可
-3. 虚拟环境中，pip安装flask
+2. 激活虚拟环境：venv\Scripts\activate 若要返回全局解释器用deactivate即可
+
+ubuntu：
+
+1. 安装virtualenv包：sudo apt-get install python-virtualenv
+2. 创建虚拟环境：virtualenv venv
+3. 激活虚拟环境：source venv/bin/activate
 
 ## 代码语法
 
