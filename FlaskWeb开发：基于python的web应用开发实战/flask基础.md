@@ -62,12 +62,14 @@ ubuntu：
 
 目的：让视图函数能访问一些对象用以处理请求
 
-用from flask import xx导入，每个线程都有自己的上下文，使用前需要激活
+用from flask import xx导入，每个线程都有自己的上下文，使用前需要推送激活，而后就能使用这些上下文变量
 
-- 程序上下文current_app：当前激活程序的程序实例，激活方法用with app.content() : xx代码 来激活
-- 程序上下文g： 处理请求时用作临时存储的对象。每次请求都会重设这个变量
-- 请求上下文request：请求对象，封装了客户端发出的 HTTP 请求中的内容，request.form可以获得post中的表单数据
-- 请求上下文session： 用户会话，用于存储请求之间需要“记住”的值，用字典的方式访问数据
+程序上下文全局变量：
+
+- current_app：当前激活程序的程序实例，激活方法用with app.content() : xx代码 来激活
+- g： 处理请求时用作临时存储的对象。每次请求都会重设这个变量
+- request：请求对象，封装了客户端发出的 HTTP 请求中的内容，request.form可以获得post中的表单数据
+- session： 用户会话，用于存储请求之间需要“记住”的值，用字典的方式访问数据
 
 ## 钩子
 
@@ -186,7 +188,7 @@ path：默认情况下，Flask 在程序文件夹中的 templates 子文件夹�
 	{% endfor %}
 </ul>
 
-<!-- 宏 -->
+<!-- 宏【类似函数】 -->
 {% macro reder_comment(comment) %}
 	<li> {{commont}} </li>
 {% endmacro%}
@@ -196,7 +198,7 @@ path：默认情况下，Flask 在程序文件夹中的 templates 子文件夹�
 	{% endfor %}
 </ul>
 
-<!-- 重复使用宏 -->
+<!-- 重复使用宏【放在文件中】 -->
 {% import 'macros.html' as macros%}
 <ul>
 	{% for comment in comments %}
@@ -215,7 +217,7 @@ path：默认情况下，Flask 在程序文件夹中的 templates 子文件夹�
 	<title>{% block title %}{% endblock %} - my</title>
 	{% endblock %}
 <\html>
-<!-- 衍生模板 -->
+<!-- 衍生模板【重定义】 -->
 {% extends "base.html" %}
 {% block title%} index {% endblock %}
 {% block head %}
