@@ -88,14 +88,30 @@ python认证包：
 - 提交和编写
 - 资料页中展示
 - 分页显示所有博客
-- 博客编辑器和markdown格式
+- 博客编辑器和markdown格式转换
+- 自动生成假用户与博客来使用[forgeryPy]
 
 步骤：
 
 1. 建立博客的model
-2. 建立显示博客的view + template
-3. 建立博客的输入form
-4. 建立写博客的view + template
+2. 创建输入博客的form
+3. 建立显示博客的view + template
+4. 生成fake的博客和用户[forgeryPy]
+5. 设置分页显示博客,Flask-SQLAlchemy 提供的 paginate() 方法
+6. 创建分页的模板宏
+7. 使用markdown和flask-pagedown支持富文本文章，添加拓展，使用富文本格式以及添加修改template
+8. 将post到服务器的markdown文本转换为html，并存入post模型中 
+9. 创建博客的view以及template单独显示
+10. 建立修改博客的view + template
+
+包与拓展：
+
+- forgeryPy：生成模拟数据
+
+- PageDown：使用 JavaScript 实现的客户端 Markdown 到 HTML 的转换程序。
+- Flask-PageDown：为 Flask 包装的 PageDown，把 PageDown 集成到 Flask-WTF 表单中。
+- Markdown：使用 Python 实现的服务器端 Markdown 到 HTML 的转换程序。 
+- Bleach：使用 Python 实现的 HTML 清理器。
 
 ## 关注者
 
@@ -103,6 +119,15 @@ python认证包：
 
 - 关注者存储形式与查询
 - 显示关注者
+- 首页显示关注者的博客
+
+步骤：
+
+1. 建立follow关系模型，并增加user模型的相关方法
+2. 资料页中显示关注者
+3. 编写关注、取关的view以及关注列表的template以及view和进入按钮
+4. 加入查询关注者的博客的函数
+5. 设置显示所有的view并修改template
 
 ## 用户评论
 
@@ -111,6 +136,13 @@ python认证包：
 - 评论的存储
 - 评论的提交和显示
 - 评论的管理
+
+步骤：
+
+1. 创建comment的模型，并建立一对多关系
+2. 添加输入表单，以及view与template显示
+3. 添加管理评论的按钮以及view
+4. 创建管理评论的template
 
 # API编写
 
@@ -131,3 +163,36 @@ python认证包：
 - 检验成功
 - 不许访问
 - 散列随机
+
+获取代码覆盖报告工具：recover
+
+测试客户端[利用url发送请求，利用返回值判断是否成功]：
+
+- 进入首页
+- 注册并登录账号
+- 若有api则可以编写代码测试
+
+Selenium测试：向web浏览器发送指令，不直接与程序交互，测试各个功能
+
+# 性能优化
+
+数据库查询：
+
+- 通过数据库提供的explain查看数据库查询采取的步骤
+- 设置阈值，把超时的都记录到日志中
+
+代码效率：
+
+- 大量运算的函数可导致cpu消耗，使用源码分析器能找出程序中执行最慢的部分
+- Flask 使用的开发 Web 服务器由 Werkzeug 提供，可根据需要为每条请求启用 Python 分析 器。
+
+# 部署
+
+步骤：
+
+1. 安装数据库等必要环境
+2. 安装适用于生产环境的 Web 服务器，例如 Gunicorn 或 uWSGI。
+3. 编写部署的代码，如创建数据库等
+4. 令程序运行在服务器中
+5. 可选：反向代理nginx、ssl证书、防火墙等
+

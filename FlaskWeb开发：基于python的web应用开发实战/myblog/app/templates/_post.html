@@ -1,0 +1,42 @@
+<div class="posts">
+    <table class="table table-striped">
+    {% for post in posts %}
+        <tr>
+            <blockquote>
+                {% if post.body_html %}
+                    {{ post.body_html | safe }}
+                {% else %}
+                    <p >{{ post.body }}</p>
+                {% endif %}
+
+              <footer> {{ moment(post.timestamp).fromNow() }}, wirted by
+                  <cite title="Source Title" >
+                      <a href="{{ url_for('.user',username=post.author.username)}}">{{ post.author.username }}</a>
+                  </cite>
+                  <div class="cm-positive">
+                      <a href="{{ url_for('.post',id=post.id) }}">
+                          <span class="label label-default">Permalink</span>
+                      </a>
+                  </div>
+                  <div class="cm-positive">
+                      {% if current_user == post.author %}
+                      <a href="{{ url_for('.edit',id=post.id )}}">
+                          <span class="lable label-primary">Edit</span>
+                      </a>
+                      {% elif current_user.is_active%}
+                        {% if current_user.is_administrator() %}
+                            <a href="{{ url_for('.edit',id=post.id) }}">
+                                <span class="label label-primary">Edit</span>
+                            </a>
+                        {% endif %}
+                      {% endif %}
+                      <a href="{{ url_for('.post', id=post.id) }}#comments">
+                          <span class="label label-primary">{{ post.comments.count() }} Comments</span>
+                      </a>
+                  </div>
+              </footer>
+            </blockquote>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
